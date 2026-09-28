@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gutterline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#DDE1E6; --chrome:#F6F7F9; --panel:#FFFFFF; --ink:#15181C; --muted:#5B6470;
+  --line:#CBD1D8; --accent:#2B7FC0; --accent-soft:#DCEBF7; --on-accent:#FFFFFF; --danger:#B8412F;
+  --sans:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#101215; --chrome:#191C21; --panel:#22262C; --ink:#E7E9EC; --muted:#96A0AB;
+    --line:#323840; --accent:#6DB5EC; --accent-soft:#1D3345; --on-accent:#0C1620; --danger:#E0715F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#101215; --chrome:#191C21; --panel:#22262C; --ink:#E7E9EC; --muted:#96A0AB;
+  --line:#323840; --accent:#6DB5EC; --accent-soft:#1D3345; --on-accent:#0C1620; --danger:#E0715F;
+}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:13px}
+*{box-sizing:border-box}
+.app{height:100%;display:grid;grid-template-rows:auto 1fr}
+header.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;
+  padding:10px 16px;background:var(--chrome);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{margin:0;font-size:18px;font-weight:800;letter-spacing:-.02em}
+.brand small{color:var(--muted);font-size:12px}
+.brand svg{flex:none}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+.btn{font:500 13px/1 var(--sans);padding:8px 11px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover:not(:disabled){border-color:var(--accent)}
+.btn:disabled{opacity:.42;cursor:default}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--danger)}
+.btn:focus-visible,.tpl:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sep{width:1px;background:var(--line);margin:0 4px}
+main.work{display:grid;grid-template-columns:minmax(0,1fr) 312px;min-height:0}
+.stage{position:relative;min-height:0;overflow:hidden}
+#cv{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.status{position:absolute;left:16px;right:16px;bottom:10px;display:flex;justify-content:space-between;gap:12px;
+  font-size:12px;color:var(--muted);pointer-events:none}
+.status .mono{font-family:var(--mono);font-size:11px;white-space:nowrap}
+.drop-on #cv{outline:3px dashed var(--accent);outline-offset:-10px}
+aside.side{background:var(--chrome);border-left:1px solid var(--line);overflow:auto;padding:16px;
+  display:flex;flex-direction:column;gap:22px}
+section h2{margin:0 0 10px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  display:flex;justify-content:space-between;align-items:baseline}
+section h2 span{font-family:var(--mono);letter-spacing:0;text-transform:none}
+.stack{display:flex;flex-direction:column;gap:10px}
+.btnrow{display:flex;flex-wrap:wrap;gap:6px}
+.btnrow .btn{flex:1 1 auto;justify-content:center}
+.note{color:var(--muted);line-height:1.45;margin:0}
+.imgrow{display:flex;gap:10px;align-items:center;min-width:0}
+.thumb{width:56px;height:56px;flex:none;border-radius:4px;border:1px solid var(--line);background:var(--panel) center/cover no-repeat}
+.imgmeta{min-width:0}
+.imgmeta div:first-child{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mono{font-family:var(--mono);font-size:11px}
+.muted{color:var(--muted)}
+.field{display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center}
+.field label{font-weight:500}
+.field output{font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.field input[type=range],.field select{grid-column:1/-1;width:100%}
+input[type=range]{accent-color:var(--accent)}
+select{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.colors{display:flex;gap:14px;flex-wrap:wrap}
+.colors label{display:flex;align-items:center;gap:6px;font-weight:500}
+input[type=color]{width:30px;height:26px;padding:0;border:1px solid var(--line);border-radius:4px;background:none;cursor:pointer}
+.sub{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.tpls{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tpl{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:6px 4px 5px;cursor:pointer;color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;gap:4px;font:500 11px var(--sans)}
+.tpl:hover{border-color:var(--accent)}
+.tpl canvas{width:100%;height:auto;display:block}
+.help{border-top:1px solid var(--line);padding-top:14px}
+.help dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;line-height:1.35}
+.help dt{font-weight:600;white-space:nowrap}
+.help dd{margin:0;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  background:var(--ink);color:var(--chrome);padding:9px 14px;border-radius:6px;font-size:13px;opacity:0;
+  transition:opacity .2s;pointer-events:none;z-index:10;max-width:calc(100% - 32px)}
+.toast.show{opacity:1}
+@media (max-width:860px){
+  .app{height:auto}
+  main.work{grid-template-columns:1fr}
+  .stage{height:76vh}
+  aside.side{border-left:0;border-top:1px solid var(--line)}
+  .tpls{grid-template-columns:repeat(4,1fr)}
+}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand">
+      <svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="28" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M4 4h11l-2 9H4z M17 4h5v9h-7z M4 16h18v10H4z" fill="currentColor" opacity=".85"/>
+      </svg>
+      <div><h1>Gutterline</h1><small>Comic page layout</small></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="bUndo" title="Undo (Ctrl+Z)" disabled>Undo</button>
+      <button class="btn" id="bRedo" title="Redo (Ctrl+Shift+Z)" disabled>Redo</button>
+      <span class="sep"></span>
+      <button class="btn" id="bOpen">Open project</button>
+      <button class="btn" id="bSave">Save project</button>
+      <button class="btn primary" id="bExport">Export PNG</button>
+    </div>
+  </header>
+  <main class="work">
+    <div class="stage" id="stage">
+      <canvas id="cv"></canvas>
+      <div class="status"><span id="hint"></span><span class="mono" id="dims"></span></div>
+    </div>
+    <aside class="side">
+      <section id="panelSec">
+        <h2>Panel <span id="pnum"></span></h2>
+        <p class="note" id="pNone">Click a panel on the page to select it.</p>
+        <div class="stack" id="pBody" hidden>
+          <div class="imgrow">
+            <div class="thumb" id="pThumb"></div>
+            <div class="imgmeta"><div id="pName">No image</div><div class="mono muted" id="pDims">Empty panel</div></div>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="bLoad">Load image</button>
+            <button class="btn" id="bRemove">Remove image</button>
+          </div>
+          <div class="stack" id="pImg">
+            <div class="field">
+              <label for="zoom">Image zoom</label><output id="zoomOut">100%</output>
+              <input type="range" id="zoom" min="-2" max="2" step="0.01" value="0">
+            </div>
+            <div class="btnrow">
+              <button class="btn" id="bFill">Fill panel</button>
+              <button class="btn" id="bFit">Show whole image</button>
+            </div>
+          </div>
+          <div class="sub">Structure</div>
+          <div class="btnrow" id="gridOps">
+            <button class="btn" id="bSplitV">Split side by side</button>
+            <button class="btn" id="bSplitH">Split top / bottom</button>
+            <button class="btn" id="bPop" title="Lift this panel out of the grid so it can be enlarged over its neighbours">Lift out to overlap</button>
+          </div>
+          <div class="btnrow" id="floatOps" hidden>
+            <button class="btn" id="bSquare">Square up</button>
+            <button class="btn" id="bFront">Bring to front</button>
+            <button class="btn" id="bBack">Send back</button>
+          </div>
+          <div class="btnrow"><button class="btn danger" id="bDelete">Delete panel</button></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Starting layouts</h2>
+        <div class="tpls" id="tpls"></div>
+      </section>
+
+      <section class="stack">
+        <h2>Page</h2>
+        <div class="field">
+          <label for="fmt">Format</label><span></span>
+          <select id="fmt"></select>
+        </div>
+        <div class="field">
+          <label for="gutter">Gutter</label><output id="gutterOut"></output>
+          <input type="range" id="gutter" min="0" max="15" step="0.5">
+        </div>
+        <div class="field">
+          <label for="margin">Outer margin</label><output id="marginOut"></output>
+          <input type="range" id="margin" min="0" max="30" step="0.5">
+        </div>
+        <div class="field">
+          <label for="border">Border weight</label><output id="borderOut"></output>
+          <input type="range" id="border" min="0" max="5" step="0.1">
+        </div>
+        <div class="colors">
+          <label for="borderColor"><input type="color" id="borderColor"> Border</label>
+          <label for="paper"><input type="color" id="paper"> Paper</label>
+        </div>
+        <div class="btnrow">
+          <button class="btn" id="bStraight">Straighten all gutters</button>
+          <button class="btn" id="bFillEmpty">Fill empty panels…</button>
+          <button class="btn" id="bAddFloat">Add overlapping panel</button>
+        </div>
+        <div class="field">
+          <label for="halo">Overlap outline</label><output id="haloOut"></output>
+          <input type="range" id="halo" min="0" max="10" step="0.5">
+        </div>
+      </section>
+
+      <section class="help">
+        <h2>Controls</h2>
+        <dl>
+          <dt>Gutter</dt><dd>Drag to move. Drag near either end to angle it. Double-click to straighten.</dd>
+          <dt>Panel</dt><dd>Click to select. Double-click or drop a file to load an image.</dd>
+          <dt>Overlap</dt><dd>Drag the edge of an overlapping panel to move it. Drag a corner to reshape it, one corner at a time.</dd>
+          <dt>Image</dt><dd>Drag to pan, scroll to zoom. Parts outside the frame are hidden.</dd>
+          <dt>Keys</dt><dd>Ctrl+Z undo, Ctrl+Shift+Z redo, Delete removes the image, Alt while dragging turns off snapping.</dd>
+        </dl>
+      </section>
+    </aside>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<input type="file" id="fileImg" accept="image/*" multiple hidden>
+<input type="file" id="fileProj" accept=".json,application/json" hidden>
+
+<script>
+(() => {
+'use strict';
+// ---------- units & formats ----------
+const DPI = 300;
+const mm = v => v / 25.4 * DPI;
+const pt = v => v / 72 * DPI;
+const FORMATS = {
+  us:     { name: 'US comic, 6.625 × 10.25 in', w: 1988, h: 3075 },
+  a4:     { name: 'A4 / European album, 210 × 297 mm', w: 2480, h: 3508 },
+  manga:  { name: 'Manga B6, 128 × 182 mm', w: 1512, h: 2150 },
+  land:   { name: 'Landscape A4, 297 × 210 mm', w: 3508, h: 2480 },
+  square: { name: 'Square, 8 × 8 in', w: 2400, h: 2400 },
+};
+const uid = p => p + Math.random().toString(36).slice(2, 9);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+// ---------- tree builders ----------
+const L = () => ({ id: uid('n'), t: 'leaf', img: null });
+const V = (a, A, B, b = a) => ({ id: uid('n'), t: 'split', dir: 'v', a, b, c: [A, B] });
+const H = (a, A, B, b = a) => ({ id: uid('n'), t: 'split', dir: 'h', a, b, c: [A, B] });
+const row2 = (r = .5) => V(r, L(), L());
+const row3 = () => V(1/3, L(), V(.5, L(), L()));
+const TEMPLATES = [
+  { name: 'Tiers',   make: () => H(.3, row2(.62), H(.46, L(), V(.36, L(), V(.5, L(), L())))) },
+  { name: 'Six',     make: () => H(1/3, row2(), H(.5, row2(), row2())) },
+  { name: 'Nine',    make: () => H(1/3, row3(), H(.5, row3(), row3())) },
+  { name: 'Splash',  make: () => H(.66, L(), row3()) },
+  { name: 'Action',  make: () => H(.27, V(.6, L(), L(), .52), H(.55, L(), V(.42, L(), V(.5, L(), L(), .58), .34), .47), .33) },
+  { name: 'Manga',   make: () => H(.24, V(.58, L(), L()), H(.38, L(), H(.52, V(.36, L(), L(), .44), L(), .46), .32)) },
+  { name: 'Wide',    make: () => H(.25, L(), H(1/3, L(), H(.5, L(), L()))) },
+  { name: 'Single',  make: () => L() },
+];
+
+// ---------- state ----------
+const S = {
+  page: { fmt: 'us', gutter: 4, margin: 12, border: 1.5, borderColor: '#111111', paper: '#ffffff', halo: 3 },
+  tree: TEMPLATES[0].make(),
+  floats: [], // overlapping panels: {id, t:'float', pts:[[x,y]x4], img}
+};
+const images = new Map(); // id -> {id,src,name,w,h,el,preview,sample}
+let selected = null;      // leaf id
+let LAY = null;           // layout result
+let view = { scale: 1, ox: 0, oy: 0 };
+let hover = null;         // hit result
+let drag = null;
+let ghost = null;         // {leafId, until}
+
+// ---------- geometry ----------
+function bboxOf(poly) {
+  if (!poly.length) return { x0: 0, y0: 0, x1: 0, y1: 0, w: 0, h: 0, cx: 0, cy: 0 };
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const [x, y] of poly) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+  return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
+}
+function clipHalf(poly, n, P, s, off) {
+  const out = [];
+  const f = p => s * ((p[0] - P[0]) * n[0] + (p[1] - P[1]) * n[1]) - off;
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], fa = f(a), fb = f(b);
+    if (fa >= 0) out.push(a);
+    if ((fa >= 0) !== (fb >= 0)) { const t = fa / (fa - fb); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); }
+  }
+  return out.length >= 3 ? out : [];
+}
+const cross = (a, b) => a[0] * b[1] - a[1] * b[0];
+function lineInPoly(poly, P0, P1) {
+  const d = [P1[0] - P0[0], P1[1] - P0[1]], ts = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], e = [b[0] - a[0], b[1] - a[1]];
+    const den = cross(d, e); if (Math.abs(den) < 1e-9) continue;
+    const w = [a[0] - P0[0], a[1] - P0[1]];
+    const t = cross(w, e) / den, u = cross(w, d) / den;
+    if (u >= -1e-6 && u <= 1 + 1e-6) ts.push(t);
+  }
+  if (ts.length < 2) return null;
+  const t0 = Math.min(...ts), t1 = Math.max(...ts);
+  return [[P0[0] + d[0] * t0, P0[1] + d[1] * t0], [P0[0] + d[0] * t1, P0[1] + d[1] * t1]];
+}
+function splitLine(n, bb) {
+  return n.dir === 'v'
+    ? [[bb.x0 + n.a * bb.w, bb.y0], [bb.x0 + n.b * bb.w, bb.y1]]
+    : [[bb.x0, bb.y0 + n.a * bb.h], [bb.x1, bb.y0 + n.b * bb.h]];
+}
+function computeLayout(tree, page, pinned, floatList) {
+  const f = FORMATS[page.fmt], m = mm(page.margin), g = mm(page.gutter);
+  const root = [[m, m], [f.w - m, m], [f.w - m, f.h - m], [m, f.h - m]];
+  const leaves = [], splits = [], geo = new Map();
+  (function rec(n, poly) {
+    const bb = bboxOf(poly);
+    geo.set(n.id, { poly, bb });
+    if (n.t === 'leaf') { leaves.push(n); return; }
+    if (!poly.length) { rec(n.c[0], []); rec(n.c[1], []); return; }
+    const ax = n.dir === 'v' ? 'x0' : 'y0', sz = n.dir === 'v' ? 'w' : 'h';
+    if (pinned && pinned.has(n.id)) { const p = pinned.get(n.id); n.a = (p[0] - bb[ax]) / bb[sz]; n.b = (p[1] - bb[ax]) / bb[sz]; }
+    n.a = clamp(n.a, .02, .98); n.b = clamp(n.b, .02, .98);
+    const [P0, P1] = splitLine(n, bb);
+    const dx = P1[0] - P0[0], dy = P1[1] - P0[1], len = Math.hypot(dx, dy) || 1;
+    const nn = n.dir === 'v' ? [dy / len, -dx / len] : [-dy / len, dx / len];
+    splits.push({ n, P0, P1, seg: lineInPoly(poly, P0, P1), bb });
+    rec(n.c[0], clipHalf(poly, nn, P0, -1, g / 2));
+    rec(n.c[1], clipHalf(poly, nn, P0, 1, g / 2));
+  })(tree, root);
+  const floats = floatList || [];
+  for (const fl of floats) geo.set(fl.id, { poly: fl.pts, bb: bboxOf(fl.pts) });
+  return { leaves, splits, geo, floats, W: f.w, H: f.h };
+}
+function relayout(pinned) { LAY = computeLayout(S.tree, S.page, pinned, S.floats); }
+const getPanel = id => id ? (findNode(S.tree, id) || S.floats.find(f => f.id === id) || null) : null;
+const allPanels = () => [...LAY.leaves, ...S.floats];
+
+function findNode(n, id) {
+  if (n.id === id) return n;
+  if (n.t === 'split') return findNode(n.c[0], id) || findNode(n.c[1], id);
+  return null;
+}
+function findParent(n, id) {
+  if (n.t !== 'split') return null;
+  if (n.c[0].id === id || n.c[1].id === id) return n;
+  return findParent(n.c[0], id) || findParent(n.c[1], id);
+}
+function pointInPoly(p, poly) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const a = poly[i], b = poly[j];
+    if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) inside = !inside;
+  }
+  return inside;
+}
+function distSeg(p, a, b) {
+  const dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy;
+  const t = l2 ? clamp(((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l2, 0, 1) : 0;
+  return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy);
+}
+
+// ---------- images ----------
+function addImage(src, name, id = uid('i'), sample = false) {
+  return new Promise(res => {
+    const el = new Image();
+    el.onload = () => {
+      const w = el.naturalWidth, h = el.naturalHeight, k = Math.min(1, 2000 / Math.max(w, h));
+      let preview = el;
+      if (k < 1) {
+        preview = document.createElement('canvas');
+        preview.width = Math.round(w * k); preview.height = Math.round(h * k);
+        preview.getContext('2d').drawImage(el, 0, 0, preview.width, preview.height);
+      }
+      images.set(id, { id, src, name, w, h, el, preview, sample });
+      res(id);
+    };
+    el.onerror = () => res(null);
+    el.src = src;
+  });
+}
+function readFile(file) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(file); });
+}
+function coverScale(im, bb) { return Math.max(bb.w / im.w, bb.h / im.h); }
+function fitImage(leaf, mode = 'fill', extra = 1) {
+  const g = LAY.geo.get(leaf.id), im = leaf.img && images.get(leaf.img.id);
+  if (!g || !im || !g.bb.w) return;
+  const s = mode === 'fill' ? coverScale(im, g.bb) : Math.min(g.bb.w / im.w, g.bb.h / im.h);
+  leaf.img.s = s * extra; leaf.img.cx = 0; leaf.img.cy = 0;
+}
+
+// ---------- canvas & view ----------
+const stage = document.getElementById('stage');
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+function resize() {
+  const r = stage.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  fitView(); render();
+}
+function fitView() {
+  if (!LAY) return;
+  const r = stage.getBoundingClientRect(), pad = 24, padB = 40;
+  const s = Math.min((r.width - pad * 2) / LAY.W, (r.height - pad - padB) / LAY.H);
+  view.scale = Math.max(s, .01);
+  view.ox = (r.width - LAY.W * view.scale) / 2;
+  view.oy = pad + (r.height - pad - padB - LAY.H * view.scale) / 2;
+}
+const toPage = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left - view.ox) / view.scale, (e.clientY - r.top - view.oy) / view.scale]; };
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function pathPoly(c, poly) { c.moveTo(poly[0][0], poly[0][1]); for (let i = 1; i < poly.length; i++) c.lineTo(poly[i][0], poly[i][1]); c.closePath(); }
+
+function drawPanel(c, leaf, g, full, display) {
+  const poly = g.poly; if (!poly.length) return;
+  const bb = g.bb;
+  c.save();
+  c.beginPath(); pathPoly(c, poly); c.clip();
+  const im = leaf.img && images.get(leaf.img.id);
+  if (im) {
+    const w = im.w * leaf.img.s, h = im.h * leaf.img.s;
+    c.drawImage(full ? im.el : im.preview, bb.cx + leaf.img.cx - w / 2, bb.cy + leaf.img.cy - h / 2, w, h);
+  } else if (display) {
+    c.fillStyle = '#EEF2F6'; c.fillRect(bb.x0, bb.y0, bb.w, bb.h);
+    c.strokeStyle = 'rgba(43,127,192,.13)'; c.lineWidth = 2 / view.scale * 1.2;
+    c.beginPath();
+    const step = 14 / view.scale;
+    for (let k = -bb.h; k < bb.w; k += step) { c.moveTo(bb.x0 + k, bb.y1); c.lineTo(bb.x0 + k + bb.h, bb.y0); }
+    c.stroke();
+    if (bb.w * view.scale > 150 && bb.h * view.scale > 44) {
+      c.fillStyle = '#6F7C8B'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.font = `500 ${12 / view.scale}px Archivo, system-ui, sans-serif`;
+      c.fillText('Double-click or drop', bb.cx, bb.cy - 8 / view.scale);
+      c.fillText('an image here', bb.cx, bb.cy + 8 / view.scale);
+    }
+  }
+  const bw = pt(S.page.border);
+  if (bw > 0) { c.beginPath(); pathPoly(c, poly); c.lineWidth = bw * 2; c.lineJoin = 'miter'; c.strokeStyle = S.page.borderColor; c.stroke(); }
+  c.restore();
+}
+
+function drawFloats(c, lay, full, display) {
+  const halo = mm(S.page.halo || 0), bw = pt(S.page.border);
+  lay.floats.forEach((fl, i) => {
+    const g = lay.geo.get(fl.id);
+    if (halo > 0 && bw > 0) {
+      // the panels underneath get a border along the cut, so they read as trimmed around this one
+      c.save(); c.beginPath();
+      for (const l of lay.leaves) { const p = lay.geo.get(l.id).poly; if (p.length) pathPoly(c, p); }
+      for (let j = 0; j < i; j++) pathPoly(c, lay.floats[j].pts);
+      c.clip();
+      c.beginPath(); pathPoly(c, g.poly);
+      c.lineWidth = (halo + bw) * 2; c.lineJoin = 'miter'; c.miterLimit = 20; c.strokeStyle = S.page.borderColor; c.stroke();
+      c.restore();
+    }
+    if (halo > 0) {
+      c.save(); c.beginPath(); pathPoly(c, g.poly);
+      c.lineWidth = halo * 2; c.lineJoin = 'miter'; c.miterLimit = 20; c.strokeStyle = S.page.paper; c.stroke();
+      c.restore();
+    }
+    if (display || fl.img) { drawPanel(c, fl, g, full, display); }
+    else { c.save(); c.beginPath(); pathPoly(c, g.poly); c.fillStyle = S.page.paper; c.fill(); c.restore(); drawPanel(c, fl, g, full, display); }
+  });
+}
+
+function render() {
+  if (!LAY) return;
+  const dpr = window.devicePixelRatio || 1, sc = view.scale;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * view.ox, dpr * view.oy);
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.25)'; ctx.shadowBlur = 22 * dpr; ctx.shadowOffsetY = 4 * dpr;
+  ctx.fillStyle = S.page.paper; ctx.fillRect(0, 0, LAY.W, LAY.H);
+  ctx.restore();
+  for (const leaf of LAY.leaves) drawPanel(ctx, leaf, LAY.geo.get(leaf.id), false, true);
+  drawFloats(ctx, LAY, false, true);
+
+  const accent = cssVar('--accent') || '#2B7FC0';
+  // ghost of the hidden part of an image while panning / zooming
+  const gid = drag && drag.type === 'pan' ? drag.leaf.id : (ghost && ghost.until > performance.now() ? ghost.leafId : null);
+  if (gid) {
+    const leaf = getPanel(gid), g = LAY.geo.get(gid), im = leaf && leaf.img && images.get(leaf.img.id);
+    if (im && g && g.poly.length) {
+      const w = im.w * leaf.img.s, h = im.h * leaf.img.s, x = g.bb.cx + leaf.img.cx - w / 2, y = g.bb.cy + leaf.img.cy - h / 2;
+      ctx.save();
+      ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5); pathPoly(ctx, g.poly); ctx.clip('evenodd');
+      ctx.globalAlpha = .32; ctx.drawImage(im.preview, x, y, w, h); ctx.globalAlpha = 1;
+      ctx.setLineDash([6 / sc, 4 / sc]); ctx.strokeStyle = accent; ctx.lineWidth = 1.5 / sc; ctx.strokeRect(x, y, w, h);
+      ctx.restore();
+    }
+  }
+  // selection
+  const sg = selected && LAY.geo.get(selected);
+  if (sg && sg.poly.length) {
+    ctx.save(); ctx.beginPath(); pathPoly(ctx, sg.poly);
+    ctx.strokeStyle = accent; ctx.lineWidth = 3 / sc; ctx.stroke(); ctx.restore();
+  }
+  // corner handles of overlapping panels (selected or hovered)
+  const hf = drag && drag.f ? drag.f : (hover && hover.f ? hover.f : null);
+  for (const fl of S.floats) {
+    if (fl.id !== selected && fl !== hf) continue;
+    ctx.save();
+    if (fl !== getPanel(selected)) { ctx.beginPath(); pathPoly(ctx, fl.pts); ctx.strokeStyle = accent; ctx.lineWidth = 2 / sc; ctx.stroke(); }
+    fl.pts.forEach((p, k) => {
+      const active = (drag && drag.type === 'fcorner' && drag.f === fl && drag.k === k) || (!drag && hover && hover.type === 'fcorner' && hover.f === fl && hover.k === k);
+      const r = (active ? 7 : 5) / sc;
+      ctx.fillStyle = active ? accent : '#fff'; ctx.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
+      ctx.strokeStyle = accent; ctx.lineWidth = 2 / sc; ctx.strokeRect(p[0] - r, p[1] - r, r * 2, r * 2);
+    });
+    ctx.restore();
+  }
+  // gutter hover / drag
+  const hs = drag && (drag.type === 'line' || drag.type === 'end') ? drag : (hover && (hover.type === 'line' || hover.type === 'end') ? hover : null);
+  if (hs) {
+    const sp = LAY.splits.find(s => s.n === hs.split.n);
+    if (sp && sp.seg) {
+      const [a, b] = sp.seg;
+      ctx.save();
+      ctx.strokeStyle = accent; ctx.lineWidth = 2 / sc; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      for (const [i, p] of [a, b].entries()) {
+        const active = hs.type === 'end' && hs.end === i;
+        ctx.beginPath(); ctx.arc(p[0], p[1], (active ? 7 : 5) / sc, 0, Math.PI * 2);
+        ctx.fillStyle = active ? accent : '#fff'; ctx.fill(); ctx.lineWidth = 2 / sc; ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+}
+
+// ---------- hit testing ----------
+function hitTest(p) {
+  const sc = view.scale, g = mm(S.page.gutter);
+  const endTol = 11 / sc;
+  let best = null;
+  // overlapping panels sit on top, so they are tested first (topmost last in the list)
+  for (let i = S.floats.length - 1; i >= 0; i--) {
+    const fl = S.floats[i];
+    for (let k = 0; k < 4; k++) if (Math.hypot(p[0] - fl.pts[k][0], p[1] - fl.pts[k][1]) < endTol) return { type: 'fcorner', f: fl, k };
+    let de = Infinity;
+    for (let k = 0; k < 4; k++) de = Math.min(de, distSeg(p, fl.pts[k], fl.pts[(k + 1) % 4]));
+    if (de < 8 / sc) return { type: 'fedge', f: fl };
+    if (pointInPoly(p, fl.pts)) return { type: 'panel', leaf: fl, f: fl };
+  }
+  for (const sp of LAY.splits) {
+    if (!sp.seg) continue;
+    for (let i = 0; i < 2; i++) {
+      const d = Math.hypot(p[0] - sp.seg[i][0], p[1] - sp.seg[i][1]);
+      if (d < endTol && (!best || d < best.d)) best = { type: 'end', split: sp, end: i, d };
+    }
+  }
+  if (best) return best;
+  const lineTol = Math.max(g / 2 + 2 / sc, 7 / sc);
+  for (const sp of LAY.splits) {
+    if (!sp.seg) continue;
+    const d = distSeg(p, sp.seg[0], sp.seg[1]);
+    if (d < lineTol && (!best || d < best.d)) best = { type: 'line', split: sp, d };
+  }
+  if (best) return best;
+  for (const leaf of LAY.leaves) {
+    const gg = LAY.geo.get(leaf.id);
+    if (gg.poly.length && pointInPoly(p, gg.poly)) return { type: 'panel', leaf };
+  }
+  return null;
+}
+
+// ---------- status hint ----------
+const hintEl = document.getElementById('hint');
+const DEFAULT_HINT = 'Drag gutters to reshape panels. Click a panel to select it.';
+function setHint(h) {
+  let t = DEFAULT_HINT, cur = '';
+  if (h) {
+    if (h.type === 'fcorner') { t = 'Drag to reshape this panel. Square up makes it rectangular again.'; cur = 'crosshair'; }
+    else if (h.type === 'fedge') { t = 'Drag to move this overlapping panel.'; cur = 'move'; }
+    else if (h.type === 'panel' && h.f && !h.f.img) { t = 'Drag to move. Double-click or drop an image file to fill it.'; cur = 'move'; }
+    else if (h.type === 'end') { t = 'Drag to angle this gutter. Hold Alt to turn off snapping.'; cur = 'move'; }
+    else if (h.type === 'line') { t = 'Drag to move this gutter. Double-click to straighten it.'; cur = h.split.n.dir === 'v' ? 'ew-resize' : 'ns-resize'; }
+    else if (h.type === 'panel') {
+      if (h.leaf.img) { t = 'Drag to pan the image. Scroll to zoom.'; cur = drag ? 'grabbing' : 'grab'; }
+      else { t = 'Double-click or drop an image file here.'; cur = 'pointer'; }
+    }
+  }
+  hintEl.textContent = t; cv.style.cursor = cur;
+}
+
+// ---------- history & autosave ----------
+const hist = { stack: [], i: -1 };
+const snapshot = () => JSON.stringify({ page: S.page, tree: S.tree, floats: S.floats });
+function commit() {
+  const s = snapshot();
+  if (hist.stack[hist.i] === s) return;
+  hist.stack = hist.stack.slice(0, hist.i + 1); hist.stack.push(s);
+  if (hist.stack.length > 120) hist.stack.shift();
+  hist.i = hist.stack.length - 1;
+  updateUndo(); scheduleSave();
+}
+function restore(s) {
+  const o = JSON.parse(s);
+  S.page = o.page; S.tree = o.tree; S.floats = o.floats || [];
+  if (selected && !getPanel(selected)) selected = null;
+  hover = null; relayout(); fitView(); syncPageInputs(); updateInspector(); drawTemplates(); render(); updateUndo(); scheduleSave();
+}
+function undo() { if (hist.i > 0) { hist.i--; restore(hist.stack[hist.i]); } }
+function redo() { if (hist.i < hist.stack.length - 1) { hist.i++; restore(hist.stack[hist.i]); } }
+function updateUndo() {
+  document.getElementById('bUndo').disabled = hist.i <= 0;
+  document.getElementById('bRedo').disabled = hist.i >= hist.stack.length - 1;
+}
+
+function usedImageIds(n, set = new Set()) {
+  if (n.t === 'leaf') { if (n.img) set.add(n.img.id); } else { usedImageIds(n.c[0], set); usedImageIds(n.c[1], set); }
+  return set;
+}
+function projectData() {
+  const imgs = [];
+  const used = usedImageIds(S.tree);
+  for (const fl of S.floats) if (fl.img) used.add(fl.img.id);
+  for (const id of used) { const im = images.get(id); if (im) imgs.push({ id, src: im.src, name: im.name, sample: im.sample }); }
+  return { app: 'gutterline', version: 2, page: S.page, tree: S.tree, floats: S.floats, images: imgs };
+}
+function idbOpen() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open('gutterline', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('kv');
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+async function idbSet(k, v) {
+  try { const db = await idbOpen(); await new Promise((res, rej) => { const tx = db.transaction('kv', 'readwrite'); tx.objectStore('kv').put(v, k); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); } catch (e) {}
+}
+async function idbGet(k) {
+  try {
+    const db = await Promise.race([idbOpen(), new Promise((_, rej) => setTimeout(() => rej('timeout'), 1500))]);
+    return await new Promise((res, rej) => { const r = db.transaction('kv').objectStore('kv').get(k); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+  } catch (e) { return null; }
+}
+let saveT = 0;
+function scheduleSave() { clearTimeout(saveT); saveT = setTimeout(() => idbSet('project', JSON.stringify(projectData())), 900); }
+
+async function loadProject(o) {
+  if (!o || !o.tree || !o.page) throw new Error('bad');
+  for (const im of o.images || []) if (!images.has(im.id)) await addImage(im.src, im.name, im.id, !!im.sample);
+  S.page = Object.assign({}, S.page, o.page);
+  if (!FORMATS[S.page.fmt]) S.page.fmt = 'us';
+  if (S.page.halo == null) S.page.halo = 3;
+  S.tree = o.tree; S.floats = Array.isArray(o.floats) ? o.floats : []; selected = null;
+}
+
+// ---------- toast ----------
+const toastEl = document.getElementById('toast'); let toastT = 0;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('show'), 2600); }
+
+// ---------- saving files ----------
+const downloadsP = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('downloads').catch(() => null) : Promise.resolve(null);
+async function saveFile(filename, blob) {
+  const dl = await downloadsP;
+  if (dl) {
+    try { await dl.save({ filename, data: blob }); toast('Saved ' + filename); }
+    catch (e) {
+      if (e && e.code === 'declined') toast('Save cancelled.');
+      else if (e && e.code === 'rate_limited') toast('A save prompt is already open.');
+      else toast('Saving is not available in this view.');
+    }
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+// ---------- pointer interaction ----------
+function descendantsSameDir(n, dir, out = []) {
+  if (n.t !== 'split') return out;
+  for (const c of n.c) { if (c.t === 'split') { if (c.dir === dir) out.push(c); descendantsSameDir(c, dir, out); } }
+  return out;
+}
+function capturePins(n) {
+  const pins = new Map();
+  for (const d of descendantsSameDir(n, n.dir)) {
+    const g = LAY.geo.get(d.id); if (!g || !g.poly.length) continue;
+    const bb = g.bb;
+    pins.set(d.id, d.dir === 'v' ? [bb.x0 + d.a * bb.w, bb.x0 + d.b * bb.w] : [bb.y0 + d.a * bb.h, bb.y0 + d.b * bb.h]);
+  }
+  return pins;
+}
+
+cv.addEventListener('pointerdown', e => {
+  if (e.button !== 0 || !LAY) return;
+  const p = toPage(e), h = hitTest(p);
+  if (!h) { selected = null; updateInspector(); render(); return; }
+  cv.setPointerCapture(e.pointerId);
+  if (h.type === 'fcorner' || h.type === 'fedge' || (h.type === 'panel' && h.f && !h.f.img)) {
+    selected = h.f.id; updateInspector();
+    drag = { type: h.type === 'fcorner' ? 'fcorner' : 'fmove', f: h.f, k: h.k, start: p, pts0: h.f.pts.map(q => q.slice()), moved: false };
+  } else if (h.type === 'line' || h.type === 'end') {
+    const n = h.split.n;
+    drag = { type: h.type, split: h.split, end: h.end, start: p, a0: n.a, b0: n.b, bb: h.split.bb, pins: capturePins(n), moved: false };
+  } else {
+    selected = h.leaf.id; updateInspector();
+    if (h.leaf.img) drag = { type: 'pan', leaf: h.leaf, start: p, cx0: h.leaf.img.cx, cy0: h.leaf.img.cy, moved: false };
+  }
+  render();
+});
+cv.addEventListener('pointermove', e => {
+  if (!LAY) return;
+  const p = toPage(e);
+  if (!drag) { hover = hitTest(p); setHint(hover); render(); return; }
+  drag.moved = true;
+  const sc = view.scale, snap = !e.altKey;
+  if (drag.type === 'fmove' || drag.type === 'fcorner') {
+    const dx = p[0] - drag.start[0], dy = p[1] - drag.start[1];
+    if (drag.type === 'fmove') drag.f.pts = drag.pts0.map(q => [q[0] + dx, q[1] + dy]);
+    else {
+      const pts = drag.pts0.map(q => q.slice()), k = drag.k;
+      let nx = pts[k][0] + dx, ny = pts[k][1] + dy;
+      if (snap) { // snap the dragged corner level/plumb with its neighbours
+        for (const j of [(k + 1) % 4, (k + 3) % 4]) {
+          if (Math.abs(nx - pts[j][0]) * sc < 7) nx = pts[j][0];
+          if (Math.abs(ny - pts[j][1]) * sc < 7) ny = pts[j][1];
+        }
+      }
+      pts[k] = [nx, ny]; drag.f.pts = pts;
+    }
+    relayout(); render(); return;
+  }
+  if (drag.type === 'pan') {
+    drag.leaf.img.cx = drag.cx0 + p[0] - drag.start[0];
+    drag.leaf.img.cy = drag.cy0 + p[1] - drag.start[1];
+    render(); return;
+  }
+  const n = drag.split.n, bb = drag.bb;
+  const ax = n.dir === 'v' ? 0 : 1, al = 1 - ax;
+  const lo = [bb.x0, bb.y0], size = [bb.w, bb.h];
+  if (drag.type === 'line') {
+    const d = (p[ax] - drag.start[ax]) / size[ax];
+    let a = drag.a0 + d, b = drag.b0 + d;
+    if (snap && Math.abs(drag.a0 - drag.b0) < 1e-4) {
+      for (const f of [1/4, 1/3, 1/2, 2/3, 3/4]) if (Math.abs(a - f) * size[ax] * sc < 6) { a = b = f; break; }
+    }
+    n.a = a; n.b = b;
+  } else {
+    const Q = drag.split.seg[1 - drag.end];
+    const den = p[al] - Q[al];
+    if (Math.abs(den) > 1) {
+      const at = v => Q[ax] + (p[ax] - Q[ax]) * (v - Q[al]) / den;
+      let a = (at(lo[al]) - lo[ax]) / size[ax], b = (at(lo[al] + size[al]) - lo[ax]) / size[ax];
+      if (snap && Math.abs(a - b) * size[ax] * sc < 8) { const m = (a + b) / 2; a = b = m; }
+      n.a = a; n.b = b;
+    }
+  }
+  relayout(drag.pins);
+  const sp = LAY.splits.find(s => s.n === n);
+  if (sp) drag.split = Object.assign({}, drag.split, { seg: drag.type === 'end' ? drag.split.seg : sp.seg, n });
+  render();
+});
+function endDrag() {
+  if (!drag) return;
+  const moved = drag.moved; drag = null;
+  if (moved) { relayout(); commit(); updateInspector(); }
+  render();
+}
+cv.addEventListener('pointerup', endDrag);
+cv.addEventListener('pointercancel', endDrag);
+cv.addEventListener('pointerleave', () => { if (!drag) { hover = null; setHint(null); render(); } });
+
+cv.addEventListener('dblclick', e => {
+  const h = hitTest(toPage(e));
+  if (!h) return;
+  if (h.type === 'line' || h.type === 'end') {
+    const n = h.split.n, m = (n.a + n.b) / 2;
+    const pins = capturePins(n);
+    n.a = n.b = m; relayout(pins); relayout(); commit(); render();
+    toast('Gutter straightened.');
+  } else if (h.type === 'fcorner' || h.type === 'fedge') {
+    return;
+  } else if (h.type === 'panel' && !h.leaf.img) {
+    selected = h.leaf.id; updateInspector(); render(); pickImages(h.leaf.id);
+  }
+});
+
+let wheelT = 0;
+cv.addEventListener('wheel', e => {
+  if (!LAY) return;
+  const p = toPage(e), h = hitTest(p);
+  if (!h || h.type !== 'panel' || !h.leaf.img) return;
+  e.preventDefault();
+  const leaf = h.leaf, g = LAY.geo.get(leaf.id), im = images.get(leaf.img.id);
+  if (!im) return;
+  const cover = coverScale(im, g.bb);
+  const s0 = leaf.img.s, s1 = clamp(s0 * Math.exp(-e.deltaY * 0.0015), cover / 8, cover * 8), f = s1 / s0;
+  const C = [g.bb.cx + leaf.img.cx, g.bb.cy + leaf.img.cy];
+  leaf.img.cx = p[0] - (p[0] - C[0]) * f - g.bb.cx;
+  leaf.img.cy = p[1] - (p[1] - C[1]) * f - g.bb.cy;
+  leaf.img.s = s1;
+  if (selected !== leaf.id) { selected = leaf.id; }
+  updateInspector();
+  ghost = { leafId: leaf.id, until: performance.now() + 700 };
+  render();
+  clearTimeout(wheelT); wheelT = setTimeout(() => { commit(); render(); }, 720);
+}, { passive: false });
+
+// drag & drop files
+stage.addEventListener('dragover', e => { if ([...e.dataTransfer.types].includes('Files')) { e.preventDefault(); stage.classList.add('drop-on'); } });
+stage.addEventListener('dragleave', e => { if (e.target === stage || e.target === cv) stage.classList.remove('drop-on'); });
+stage.addEventListener('drop', e => {
+  e.preventDefault(); stage.classList.remove('drop-on');
+  const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+  if (!files.length) { toast('Drop image files (PNG, JPG, WebP, GIF).'); return; }
+  const h = hitTest(toPage(e));
+  assignFiles(files, h && h.type === 'panel' ? h.leaf.id : null);
+});
+
+// ---------- loading images into panels ----------
+const fileImg = document.getElementById('fileImg');
+let pickTarget = null;
+function pickImages(target) { pickTarget = target; fileImg.value = ''; fileImg.click(); }
+fileImg.addEventListener('change', () => { const files = [...fileImg.files]; if (files.length) assignFiles(files, pickTarget); });
+
+async function assignFiles(files, startId) {
+  const leaves = allPanels();
+  let targets;
+  if (startId) {
+    const i = leaves.findIndex(l => l.id === startId);
+    const after = leaves.slice(i + 1).filter(l => !l.img), before = leaves.slice(0, i).filter(l => !l.img);
+    targets = [leaves[i], ...after, ...before];
+  } else targets = leaves.filter(l => !l.img);
+  if (!targets.length) { toast('No empty panels. Select a panel to replace its image.'); return; }
+  let n = 0;
+  for (let k = 0; k < files.length && k < targets.length; k++) {
+    try {
+      const src = await readFile(files[k]);
+      const id = await addImage(src, files[k].name);
+      if (!id) continue;
+      targets[k].img = { id, s: 1, cx: 0, cy: 0 };
+      fitImage(targets[k], 'fill'); n++;
+    } catch (err) {}
+  }
+  if (!n) { toast('Could not read that file as an image.'); return; }
+  selected = targets[0].id;
+  commit(); updateInspector(); render();
+  const skipped = files.length - n;
+  toast(`Loaded ${n} image${n > 1 ? 's' : ''}` + (skipped > 0 ? `. ${skipped} did not fit: no more empty panels.` : '.'));
+}
+
+// ---------- inspector ----------
+const $ = id => document.getElementById(id);
+function updateInspector() {
+  const leaf = getPanel(selected);
+  $('pNone').hidden = !!leaf; $('pBody').hidden = !leaf;
+  if (!leaf) { $('pnum').textContent = ''; return; }
+  const isFloat = leaf.t === 'float';
+  $('gridOps').hidden = isFloat; $('floatOps').hidden = !isFloat;
+  if (isFloat) {
+    const fi = S.floats.indexOf(leaf);
+    $('pnum').textContent = `overlapping ${fi + 1} of ${S.floats.length}`;
+    $('bFront').disabled = fi === S.floats.length - 1; $('bBack').disabled = fi === 0;
+  } else {
+    const idx = LAY.leaves.findIndex(l => l.id === leaf.id);
+    $('pnum').textContent = `${idx + 1} of ${LAY.leaves.length}`;
+  }
+  const im = leaf.img && images.get(leaf.img.id);
+  $('pImg').hidden = !im; $('bRemove').disabled = !im;
+  $('bLoad').textContent = im ? 'Replace image' : 'Load image';
+  $('bDelete').disabled = leaf === S.tree && !isFloat;
+  if (im) {
+    $('pThumb').style.backgroundImage = `url("${im.src}")`;
+    $('pName').textContent = im.name;
+    $('pDims').textContent = `${im.w} × ${im.h} px`;
+    const g = LAY.geo.get(leaf.id);
+    const rel = g && g.bb.w ? leaf.img.s / coverScale(im, g.bb) : 1;
+    $('zoom').value = Math.log2(rel).toFixed(2);
+    $('zoomOut').textContent = Math.round(rel * 100) + '% of fill';
+  } else {
+    $('pThumb').style.backgroundImage = '';
+    $('pName').textContent = 'No image';
+    $('pDims').textContent = 'Empty panel';
+  }
+}
+const selLeaf = () => getPanel(selected);
+$('bLoad').onclick = () => { if (selected) pickImages(selected); };
+$('bRemove').onclick = () => { const l = selLeaf(); if (l && l.img) { l.img = null; commit(); updateInspector(); render(); } };
+$('bFill').onclick = () => { const l = selLeaf(); if (l && l.img) { fitImage(l, 'fill'); commit(); updateInspector(); render(); } };
+$('bFit').onclick = () => { const l = selLeaf(); if (l && l.img) { fitImage(l, 'fit'); commit(); updateInspector(); render(); } };
+$('zoom').addEventListener('input', () => {
+  const l = selLeaf(); if (!l || !l.img) return;
+  const im = images.get(l.img.id), g = LAY.geo.get(l.id); if (!im || !g.bb.w) return;
+  const s1 = coverScale(im, g.bb) * Math.pow(2, +$('zoom').value), f = s1 / l.img.s;
+  l.img.cx *= f; l.img.cy *= f; l.img.s = s1;
+  $('zoomOut').textContent = Math.round(Math.pow(2, +$('zoom').value) * 100) + '% of fill';
+  ghost = { leafId: l.id, until: performance.now() + 600 }; render();
+  clearTimeout(wheelT); wheelT = setTimeout(render, 650);
+});
+$('zoom').addEventListener('change', commit);
+
+function splitSelected(dir) {
+  const l = selLeaf(); if (!l) return;
+  const parent = findParent(S.tree, l.id);
+  const nl = L();
+  const sp = { id: uid('n'), t: 'split', dir, a: .5, b: .5, c: [l, nl] };
+  if (!parent) S.tree = sp; else parent.c[parent.c[0] === l ? 0 : 1] = sp;
+  relayout(); if (l.img) fitImage(l, 'fill');
+  commit(); updateInspector(); render();
+}
+$('bSplitV').onclick = () => splitSelected('v');
+$('bSplitH').onclick = () => splitSelected('h');
+function rectPts(cx, cy, w, h) { return [[cx - w / 2, cy - h / 2], [cx + w / 2, cy - h / 2], [cx + w / 2, cy + h / 2], [cx - w / 2, cy + h / 2]]; }
+function removeLeafFromGrid(l) {
+  const parent = findParent(S.tree, l.id), sib = parent.c[parent.c[0] === l ? 1 : 0];
+  const gp = findParent(S.tree, parent.id);
+  if (!gp) S.tree = sib; else gp.c[gp.c[0] === parent ? 0 : 1] = sib;
+}
+$('bPop').onclick = () => {
+  const l = selLeaf(); if (!l || l.t !== 'leaf') return;
+  const g = LAY.geo.get(l.id); if (!g || !g.poly.length) return;
+  const k = 1.18, w = g.bb.w * k, h = g.bb.h * k;
+  const cx = clamp(g.bb.cx, w / 2, LAY.W - w / 2), cy = clamp(g.bb.cy, h / 2, LAY.H - h / 2);
+  const fl = { id: uid('f'), t: 'float', pts: rectPts(cx, cy, w, h), img: l.img ? Object.assign({}, l.img) : null };
+  if (l === S.tree) l.img = null; else removeLeafFromGrid(l);
+  S.floats.push(fl); selected = fl.id;
+  relayout(); if (fl.img) fitImage(fl, 'fill');
+  commit(); updateInspector(); render();
+  toast('Panel lifted out and enlarged. Its neighbours filled the gap underneath.');
+};
+$('bAddFloat').onclick = () => {
+  const cur = selLeaf(), g = cur && LAY.geo.get(cur.id);
+  const w = LAY.W * .42, h = LAY.H * .24;
+  const cx = g && g.bb.w ? clamp(g.bb.cx, w / 2, LAY.W - w / 2) : LAY.W / 2, cy = g && g.bb.w ? clamp(g.bb.cy, h / 2, LAY.H - h / 2) : LAY.H / 2;
+  const fl = { id: uid('f'), t: 'float', pts: rectPts(cx, cy, w, h), img: null };
+  S.floats.push(fl); selected = fl.id;
+  relayout(); commit(); updateInspector(); render();
+  toast('Overlapping panel added. Drag its edge to move it, its corners to reshape it.');
+};
+$('bSquare').onclick = () => {
+  const l = selLeaf(); if (!l || l.t !== 'float') return;
+  const b = bboxOf(l.pts); l.pts = rectPts(b.cx, b.cy, b.w, b.h);
+  relayout(); commit(); render();
+};
+function restack(toFront) {
+  const l = selLeaf(); if (!l || l.t !== 'float') return;
+  S.floats.splice(S.floats.indexOf(l), 1);
+  toFront ? S.floats.push(l) : S.floats.unshift(l);
+  relayout(); commit(); updateInspector(); render();
+}
+$('bFront').onclick = () => restack(true);
+$('bBack').onclick = () => restack(false);
+$('bDelete').onclick = () => {
+  const l = selLeaf(); if (!l) return;
+  if (l.t === 'float') {
+    S.floats.splice(S.floats.indexOf(l), 1);
+    selected = null; relayout(); commit(); updateInspector(); render();
+    toast('Overlapping panel deleted.'); return;
+  }
+  if (l === S.tree) return;
+  const parent = findParent(S.tree, l.id), sib = parent.c[parent.c[0] === l ? 1 : 0];
+  const gp = findParent(S.tree, parent.id);
+  if (!gp) S.tree = sib; else gp.c[gp.c[0] === parent ? 0 : 1] = sib;
+  selected = null; relayout(); commit(); updateInspector(); render();
+  toast('Panel deleted. Its neighbour took the space.');
+};
+
+// ---------- page settings ----------
+const fmtSel = $('fmt');
+for (const [k, f] of Object.entries(FORMATS)) { const o = document.createElement('option'); o.value = k; o.textContent = f.name; fmtSel.appendChild(o); }
+function syncPageInputs() {
+  fmtSel.value = S.page.fmt;
+  $('gutter').value = S.page.gutter; $('gutterOut').textContent = S.page.gutter.toFixed(1) + ' mm';
+  $('margin').value = S.page.margin; $('marginOut').textContent = S.page.margin.toFixed(1) + ' mm';
+  $('border').value = S.page.border; $('borderOut').textContent = S.page.border.toFixed(1) + ' pt';
+  $('borderColor').value = S.page.borderColor; $('paper').value = S.page.paper;
+  $('halo').value = S.page.halo; $('haloOut').textContent = (+S.page.halo).toFixed(1) + ' mm';
+  const f = FORMATS[S.page.fmt];
+  $('dims').textContent = `${f.w} × ${f.h} px at ${DPI} dpi`;
+}
+function pageInput(key, parse) {
+  const el = $(key);
+  el.addEventListener('input', () => { S.page[key] = parse(el.value); syncPageInputs(); relayout(); updateInspector(); render(); });
+  el.addEventListener('change', () => { commit(); drawTemplates(); });
+}
+pageInput('gutter', Number); pageInput('margin', Number); pageInput('border', Number); pageInput('halo', Number);
+pageInput('borderColor', String); pageInput('paper', String);
+fmtSel.addEventListener('change', () => {
+  S.page.fmt = fmtSel.value; syncPageInputs(); relayout(); fitView();
+  (function refit(n) { if (n.t === 'leaf') { if (n.img) fitImage(n, 'fill'); } else { refit(n.c[0]); refit(n.c[1]); } })(S.tree);
+  commit(); drawTemplates(); updateInspector(); render();
+});
+$('bStraight').onclick = () => {
+  for (const sp of LAY.splits) { const m = (sp.n.a + sp.n.b) / 2; sp.n.a = sp.n.b = m; }
+  relayout(); commit(); render(); toast('All gutters straightened.');
+};
+$('bFillEmpty').onclick = () => {
+  if (!allPanels().some(l => !l.img)) { toast('Every panel already has an image.'); return; }
+  pickImages(null);
+};
+
+// ---------- templates ----------
+const tplWrap = $('tpls');
+const tplTrees = TEMPLATES.map(t => t.make());
+TEMPLATES.forEach((t, i) => {
+  const b = document.createElement('button');
+  b.className = 'tpl'; b.type = 'button'; b.title = `Start from the ${t.name} layout`;
+  const c = document.createElement('canvas'); c.width = 120; c.height = 160;
+  const s = document.createElement('span'); s.textContent = t.name;
+  b.append(c, s);
+  b.onclick = () => applyTemplate(i);
+  tplWrap.appendChild(b);
+});
+function drawTemplates() {
+  const f = FORMATS[S.page.fmt];
+  const accent = cssVar('--muted') || '#5B6470';
+  [...tplWrap.querySelectorAll('canvas')].forEach((c, i) => {
+    const W = 120, Hh = Math.round(120 * f.h / f.w);
+    c.width = W; c.height = Hh;
+    const x = c.getContext('2d'), k = W / f.w;
+    const lay = computeLayout(tplTrees[i], Object.assign({}, S.page, { gutter: Math.max(S.page.gutter, 3), margin: Math.max(S.page.margin, 6) }));
+    x.clearRect(0, 0, W, Hh);
+    x.fillStyle = '#fff'; x.fillRect(0, 0, W, Hh);
+    x.setTransform(k, 0, 0, k, 0, 0);
+    x.fillStyle = accent; x.globalAlpha = .55;
+    for (const l of lay.leaves) { const g = lay.geo.get(l.id); if (!g.poly.length) continue; x.beginPath(); pathPoly(x, g.poly); x.fill(); }
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1;
+  });
+}
+function cloneFresh(n) {
+  if (n.t === 'leaf') return L();
+  return { id: uid('n'), t: 'split', dir: n.dir, a: n.a, b: n.b, c: [cloneFresh(n.c[0]), cloneFresh(n.c[1])] };
+}
+function applyTemplate(i) {
+  const imgs = LAY.leaves.filter(l => l.img).map(l => l.img);
+  S.tree = cloneFresh(TEMPLATES[i].make());
+  relayout();
+  LAY.leaves.forEach((l, k) => { if (imgs[k]) { l.img = { id: imgs[k].id, s: 1, cx: 0, cy: 0 }; fitImage(l, 'fill'); } });
+  selected = null; commit(); updateInspector(); render();
+  const lost = imgs.length - Math.min(imgs.length, LAY.leaves.length);
+  toast(`${TEMPLATES[i].name} layout applied` + (imgs.length ? ', images moved in reading order' : '') + (lost ? `. ${lost} image${lost > 1 ? 's' : ''} had no panel; undo to get them back.` : '.'));
+}
+
+// ---------- top bar ----------
+$('bUndo').onclick = undo; $('bRedo').onclick = redo;
+$('bExport').onclick = () => {
+  const lay = computeLayout(S.tree, S.page, null, S.floats);
+  const c = document.createElement('canvas'); c.width = lay.W; c.height = lay.H;
+  const x = c.getContext('2d');
+  x.fillStyle = S.page.paper; x.fillRect(0, 0, lay.W, lay.H);
+  x.imageSmoothingQuality = 'high';
+  for (const l of lay.leaves) drawPanel(x, l, lay.geo.get(l.id), true, false);
+  drawFloats(x, lay, true, false);
+  c.toBlob(b => { if (b) saveFile('comic-page.png', b); else toast('Export failed.'); }, 'image/png');
+};
+$('bSave').onclick = () => saveFile('comic-page.json', new Blob([JSON.stringify(projectData())], { type: 'application/json' }));
+const fileProj = $('fileProj');
+$('bOpen').onclick = () => { fileProj.value = ''; fileProj.click(); };
+fileProj.addEventListener('change', async () => {
+  const f = fileProj.files[0]; if (!f) return;
+  try {
+    const o = JSON.parse(await f.text());
+    await loadProject(o);
+    relayout(); fitView(); syncPageInputs(); drawTemplates(); commit(); updateInspector(); render();
+    toast('Opened ' + f.name);
+  } catch (e) { toast('That file is not a Gutterline project.'); }
+});
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' && e.target.type !== 'range' || tag === 'select') return;
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && e.key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); }
+  else if (mod && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
+  else if ((e.key === 'Delete' || e.key === 'Backspace') && tag !== 'input') {
+    const l = selLeaf(); if (l && l.img) { e.preventDefault(); l.img = null; commit(); updateInspector(); render(); }
+  } else if (e.key === 'Escape') { selected = null; updateInspector(); render(); }
+});
+
+// ---------- sample artwork (procedural, marked as samples) ----------
+function rng(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+function mk(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function sampleSkyline() {
+  const c = mk(1800, 1000), x = c.getContext('2d'), r = rng(7);
+  const g = x.createLinearGradient(0, 0, 0, 1000);
+  g.addColorStop(0, '#0d1b3d'); g.addColorStop(.62, '#43306e'); g.addColorStop(1, '#e27d5b');
+  x.fillStyle = g; x.fillRect(0, 0, 1800, 1000);
+  x.fillStyle = 'rgba(255,255,255,.7)';
+  for (let i = 0; i < 120; i++) x.fillRect(r() * 1800, r() * 500, 2, 2);
+  x.fillStyle = '#f3ead0'; x.beginPath(); x.arc(1380, 230, 105, 0, Math.PI * 2); x.fill();
+  for (const [col, base, hmin, hvar] of [['#241d45', 1000, 180, 360], ['#0f1220', 1000, 240, 480]]) {
+    let xx = -20;
+    while (xx < 1800) {
+      const bw = 70 + r() * 130, bh = hmin + r() * hvar;
+      x.fillStyle = col; x.fillRect(xx, base - bh, bw, bh);
+      if (col === '#0f1220') for (let wy = base - bh + 22; wy < base - 20; wy += 34) for (let wx = xx + 12; wx < xx + bw - 16; wx += 26)
+        if (r() < .3) { x.fillStyle = '#ffcf6b'; x.fillRect(wx, wy, 12, 16); }
+      xx += bw + r() * 14;
+    }
+  }
+  return c.toDataURL('image/jpeg', .88);
+}
+function sampleLighthouse() {
+  const c = mk(900, 1500), x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 1500);
+  g.addColorStop(0, '#12263a'); g.addColorStop(.55, '#2c5d6e'); g.addColorStop(1, '#0b1a24');
+  x.fillStyle = g; x.fillRect(0, 0, 900, 1500);
+  x.fillStyle = 'rgba(255,236,160,.22)';
+  x.beginPath(); x.moveTo(470, 430); x.lineTo(-100, 250); x.lineTo(-100, 560); x.closePath(); x.fill();
+  x.beginPath(); x.moveTo(470, 430); x.lineTo(1000, 300); x.lineTo(1000, 520); x.closePath(); x.fill();
+  x.fillStyle = '#1b2a2f'; x.beginPath(); x.moveTo(140, 1500); x.lineTo(260, 1180); x.lineTo(700, 1150); x.lineTo(820, 1500); x.fill();
+  for (let i = 0; i < 6; i++) {
+    const y0 = 560 + i * 105, t = (y0 - 560) / 630;
+    const hw0 = 70 + t * 70, hw1 = 70 + ((y0 + 105 - 560) / 630) * 70;
+    x.fillStyle = i % 2 ? '#e9e4d8' : '#c4413a';
+    x.beginPath(); x.moveTo(470 - hw0, y0); x.lineTo(470 + hw0, y0); x.lineTo(470 + hw1, y0 + 105); x.lineTo(470 - hw1, y0 + 105); x.fill();
+  }
+  x.fillStyle = '#23303a'; x.fillRect(380, 470, 180, 90); x.fillRect(400, 380, 140, 20);
+  x.fillStyle = '#ffe69a'; x.fillRect(410, 400, 120, 70);
+  x.fillStyle = '#23303a'; x.beginPath(); x.moveTo(390, 380); x.lineTo(470, 320); x.lineTo(550, 380); x.fill();
+  x.strokeStyle = 'rgba(255,255,255,.35)'; x.lineWidth = 3;
+  for (let y = 1250; y < 1500; y += 40) { x.beginPath(); for (let xx = 0; xx <= 900; xx += 30) x.lineTo(xx, y + Math.sin(xx / 45 + y) * 6); x.stroke(); }
+  return c.toDataURL('image/jpeg', .88);
+}
+function sampleKrak() {
+  const c = mk(1200, 1200), x = c.getContext('2d');
+  x.fillStyle = '#ffd23f'; x.fillRect(0, 0, 1200, 1200);
+  x.fillStyle = '#e8483b';
+  for (let yy = 0; yy < 1200; yy += 30) for (let xx = (yy / 30) % 2 ? 15 : 0; xx < 1200; xx += 30) {
+    const d = Math.hypot(xx - 600, yy - 600) / 850; x.beginPath(); x.arc(xx, yy, 2 + d * 11, 0, Math.PI * 2); x.fill();
+  }
+  x.beginPath();
+  for (let i = 0; i < 36; i++) { const a = i / 36 * Math.PI * 2, rr = i % 2 ? 300 : 520; x.lineTo(600 + Math.cos(a) * rr, 600 + Math.sin(a) * rr * .85); }
+  x.closePath(); x.fillStyle = '#ffffff'; x.fill(); x.lineWidth = 14; x.strokeStyle = '#161616'; x.lineJoin = 'miter'; x.stroke();
+  x.save(); x.translate(600, 620); x.rotate(-.12);
+  x.font = '900 190px Impact, "Arial Black", sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.lineWidth = 16; x.strokeStyle = '#161616'; x.strokeText('KRAK!', 0, 0);
+  x.fillStyle = '#e8483b'; x.fillText('KRAK!', 0, 0);
+  x.restore();
+  return c.toDataURL('image/jpeg', .9);
+}
+async function loadSamples() {
+  const ids = [
+    await addImage(sampleSkyline(), 'Sample: night skyline', undefined, true),
+    await addImage(sampleLighthouse(), 'Sample: lighthouse', undefined, true),
+    await addImage(sampleKrak(), 'Sample: sound effect', undefined, true),
+  ];
+  relayout();
+  const slots = [[2, 0, 1.12], [1, 1, 1.05], [4, 2, 1.3]];
+  for (const [li, ii, extra] of slots) {
+    const leaf = LAY.leaves[li]; if (!leaf || !ids[ii]) continue;
+    leaf.img = { id: ids[ii], s: 1, cx: 0, cy: 0 }; fitImage(leaf, 'fill', extra);
+  }
+  const sk = LAY.leaves[2]; if (sk && sk.img) sk.img.cy = -40;
+}
+
+// ---------- boot ----------
+async function boot() {
+  relayout(); syncPageInputs(); drawTemplates(); resize(); setHint(null);
+  let restored = false;
+  const saved = await idbGet('project');
+  if (saved) { try { await loadProject(JSON.parse(saved)); restored = true; } catch (e) {} }
+  if (!restored) await loadSamples();
+  relayout(); fitView(); syncPageInputs(); drawTemplates();
+  hist.stack = [snapshot()]; hist.i = 0; updateUndo();
+  selected = restored ? null : (LAY.leaves[2] && LAY.leaves[2].id);
+  updateInspector(); render();
+}
+new ResizeObserver(resize).observe(stage);
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
+if (mq.addEventListener) mq.addEventListener('change', () => { drawTemplates(); render(); });
+new MutationObserver(() => { drawTemplates(); render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+boot();
+})();
+</script>
+</body>
+</html>
