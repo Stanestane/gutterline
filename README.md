@@ -23,3 +23,7 @@ Open `index.html` in any modern browser. There is nothing to install or build. E
 | Overlapping panel | Drag the edge to move, drag a corner to reshape |
 | Image | Drag to pan, scroll to zoom |
 | Keys | Ctrl+Z undo, Ctrl+Shift+Z redo, Delete removes the image, Esc deselects |
+
+## License
+
+MIT. See [LICENSE](LICENSE).
