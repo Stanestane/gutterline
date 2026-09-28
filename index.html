@@ -898,6 +898,15 @@ function splitSelected(dir) {
 }
 $('bSplitV').onclick = () => splitSelected('v');
 $('bSplitH').onclick = () => splitSelected('h');
+// after panels grow (a neighbour was deleted or lifted out), refit images that no longer cover their panel
+function refitUncovered() {
+  for (const l of LAY.leaves) {
+    const im = l.img && images.get(l.img.id), g = LAY.geo.get(l.id);
+    if (!im || !g || !g.bb.w) continue;
+    const w = im.w * l.img.s, h = im.h * l.img.s, x0 = g.bb.cx + l.img.cx - w / 2, y0 = g.bb.cy + l.img.cy - h / 2;
+    if (x0 > g.bb.x0 + 1 || y0 > g.bb.y0 + 1 || x0 + w < g.bb.x1 - 1 || y0 + h < g.bb.y1 - 1) fitImage(l, 'fill');
+  }
+}
 function rectPts(cx, cy, w, h) { return [[cx - w / 2, cy - h / 2], [cx + w / 2, cy - h / 2], [cx + w / 2, cy + h / 2], [cx - w / 2, cy + h / 2]]; }
 function removeLeafFromGrid(l) {
   const parent = findParent(S.tree, l.id), sib = parent.c[parent.c[0] === l ? 1 : 0];
@@ -912,7 +921,7 @@ $('bPop').onclick = () => {
   const fl = { id: uid('f'), t: 'float', pts: rectPts(cx, cy, w, h), img: l.img ? Object.assign({}, l.img) : null };
   if (l === S.tree) l.img = null; else removeLeafFromGrid(l);
   S.floats.push(fl); selected = fl.id;
-  relayout(); if (fl.img) fitImage(fl, 'fill');
+  relayout(); if (fl.img) fitImage(fl, 'fill'); refitUncovered();
   commit(); updateInspector(); render();
   toast('Panel lifted out and enlarged. Its neighbours filled the gap underneath.');
 };
@@ -949,7 +958,7 @@ $('bDelete').onclick = () => {
   const parent = findParent(S.tree, l.id), sib = parent.c[parent.c[0] === l ? 1 : 0];
   const gp = findParent(S.tree, parent.id);
   if (!gp) S.tree = sib; else gp.c[gp.c[0] === parent ? 0 : 1] = sib;
-  selected = null; relayout(); commit(); updateInspector(); render();
+  selected = null; relayout(); refitUncovered(); commit(); updateInspector(); render();
   toast('Panel deleted. Its neighbour took the space.');
 };
 
